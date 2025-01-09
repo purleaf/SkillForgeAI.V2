@@ -1,0 +1,862 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TOEFL iBT Reading Section - SkillForgeAI</title>
+    <!-- Include Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Include Font Awesome without integrity -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+          referrerpolicy="no-referrer"/>
+    <style>
+        /* General Styles */
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+            background: linear-gradient(135deg, #ADD8E6 0%, #E6E6FA 50%, #FFDAB9 100%);
+            background-attachment: fixed;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Overlay Wavy Lines */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080"><defs><pattern id="pattern" patternUnits="userSpaceOnUse" width="100" height="100"><path d="M0 50 Q 25 0 50 50 T 100 50" fill="none" stroke="white" stroke-width="2" opacity="0.5"/></pattern></defs><rect width="1920" height="1080" fill="url(%23pattern)"/></svg>');
+            opacity: 0.7;
+            z-index: -1;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .navbar .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .navbar ul {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            list-style: none;
+            margin: 0;
+        }
+
+        .navbar li {
+            margin-left: 30px;
+        }
+
+        .navbar a {
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+            position: relative;
+            padding: 8px 12px;
+            border-radius: 10px;
+            transition: background 0.3s;
+        }
+
+        .navbar a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Dropdown Menu */
+        .navbar .dropdown-menu {
+            display: none;
+            position: absolute;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            margin-top: 10px;
+            min-width: 150px;
+            z-index: 999;
+        }
+
+        .navbar .dropdown-menu a {
+            display: block;
+            padding: 10px 20px;
+            white-space: nowrap;
+        }
+
+        .navbar .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+        /* Main Content */
+        #main-content {
+            padding: 20px;
+            margin-top: 80px; /* Adjust according to navbar height */
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Header Section */
+        #header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 15px 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(15px);
+        }
+
+        #header div {
+            font-size: 16px;
+            color: #333;
+        }
+
+        /* Instruction Screen */
+        #instructions-screen {
+            display: none;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(15px);
+        }
+
+        #instructions-screen h2 {
+            margin-bottom: 20px;
+        }
+
+        #instructions-screen p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        /* Container for Passage and Questions */
+        #container {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        /* Left Panel - Reading Passage */
+        #passage-panel {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(15px);
+            overflow-y: auto;
+            max-height: 600px;
+        }
+
+        #passage-panel p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        .paragraph-number {
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        /* Highlighted Paragraph */
+        .highlighted-paragraph {
+            background-color: yellow;
+        }
+
+        /* Right Panel - Questions */
+        #question-panel {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(15px);
+            overflow-y: auto;
+            max-height: 600px;
+            position: relative;
+        }
+
+        .question {
+            margin-bottom: 30px;
+        }
+
+        .question h3 {
+            margin-bottom: 10px;
+            font-size: 20px;
+            color: #333;
+        }
+
+        .question p {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .options {
+            list-style: none;
+            padding: 0;
+        }
+
+        .options li {
+            margin-bottom: 5px;
+        }
+
+        .options label {
+            cursor: pointer;
+            color: #666;
+        }
+
+        /* Navigation Buttons */
+        .navigation-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .navigation-buttons button {
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #333;
+            transition: background 0.3s;
+        }
+
+        .navigation-buttons button:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        .navigation-buttons button:disabled {
+            background: rgba(255, 255, 255, 0.5);
+            cursor: not-allowed;
+        }
+
+        /* Help and End Section Buttons */
+        #help-button, #end-section-button {
+            position: fixed;
+            bottom: 20px;
+            padding: 12px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #333;
+            transition: background 0.3s;
+            backdrop-filter: blur(15px);
+            z-index: 1001; /* Ensure it's above other content */
+        }
+
+        #help-button {
+            left: 20px;
+        }
+
+        #end-section-button {
+            right: 20px;
+        }
+
+        #help-button:hover, #end-section-button:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        /* Review Screen */
+        #review-screen {
+            display: none;
+            position: fixed;
+            top: 80px;
+            left: 20px;
+            right: 20px;
+            bottom: 80px; /* Adjusted to match button offset */
+            background-color: rgba(255, 255, 255, 0.95);
+            overflow-y: auto;
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(15px);
+            z-index: 1000;
+        }
+
+        #review-screen h2 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .review-item {
+            margin-bottom: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+
+        .review-item:hover {
+            background: rgba(0, 0, 0, 0.05);
+        }
+
+        .flagged {
+            background-color: #fff9c4;
+        }
+
+        /* Flag Button */
+        .flag-button {
+            background-color: #ffeb3b;
+            border: none;
+            padding: 8px 12px;
+            cursor: pointer;
+            border-radius: 4px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+            margin-top: 10px;
+        }
+
+        .flag-button:hover {
+            background-color: #ffe082;
+        }
+
+        /* Drag-and-Drop (for summary questions) */
+        .draggable {
+            padding: 5px;
+            margin-bottom: 5px;
+            background-color: #e0f7fa;
+            cursor: move;
+            border: 1px solid #00acc1;
+            border-radius: 4px;
+            transition: background-color 0.3s, border-color 0.3s;
+        }
+        .draggable:active {
+            cursor: grabbing;
+        }
+        .draggable.dragging {
+            opacity: 0.5;
+        }
+        .droppable {
+            min-height: 50px;
+            padding: 5px;
+            border: 1px dashed #ccc;
+            border-radius: 4px;
+            transition: background-color 0.3s, border-color 0.3s;
+            background-color: #f9f9f9;
+        }
+        .droppable.dragover {
+            border-color: #00acc1;
+            background-color: #e0f7fa;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            #container {
+                flex-direction: column;
+            }
+            #passage-panel, #question-panel {
+                max-height: 400px;
+            }
+            #help-button, #end-section-button {
+                bottom: 60px;
+                padding: 10px 16px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Navigation Bar -->
+<nav class="navbar">
+    <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+        <span class="logo">SkillForgeAI</span>
+        <ul>
+            <li><a href="{% url 'main_page'%}">Home</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#ai">AI Technology</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#faqs">FAQs</a></li>
+            <li><a href="#contact">Contact</a></li>
+            {% if user.is_authenticated %}
+            <!-- If user is logged in, show account dropdown -->
+            <li class="dropdown">
+                <a href="javascript:void(0)">
+                    {{ user.username }}
+                </a>
+                <div class="dropdown-menu">
+                    <a href="{% url 'account_settings' %}">Account Settings</a>
+                    <a href="{% url 'logout' %}">Logout</a>
+                </div>
+            </li>
+            {% else %}
+            <!-- If user is not logged in, show login and sign up buttons -->
+            <li><a href="{% url 'login' %}" class="button">Login</a></li>
+            <li><a href="#" class="button modal-button" data-modal="signup-modal">Sign Up</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<div id="main-content" class="container">
+    <!-- Header Section -->
+    <div id="header">
+        <div id="progress">Reading Instructions</div>
+        <div id="timer">Time Remaining: <span id="time">36:00</span></div>
+    </div>
+
+    <!-- Instruction Screen -->
+    <div id="instructions-screen">
+        <h2>Reading Section</h2>
+        <p><strong>Purpose:</strong> Demonstrate your ability to comprehend academic passages in English.</p>
+        <p><strong>Number of Passages:</strong> 2</p>
+        <p><strong>Total Time:</strong> 36 minutes</p>
+        <p><strong>Question Navigation:</strong></p>
+        <ul>
+            <li><strong>Next Button:</strong> Move to the next question.</li>
+            <li><strong>Back Button:</strong> Return to the previous question.</li>
+            <li><strong>Skip & Return:</strong> You can skip questions and revisit them later if time permits.</li>
+            <li><strong>Review Feature:</strong> Select "Review" to see which questions have been answered and which remain unanswered. You can navigate directly to any question from the Review screen.</li>
+        </ul>
+        <p>When you are ready, click <strong>Next</strong> to view the first reading passage and its questions.</p>
+         <button id="next-button" onclick="goNext()">Next</button>
+    </div>
+
+    <!-- Container for Passage + Questions -->
+    <div id="container" style="display: none;">
+        <!-- Left Panel: Reading Passage -->
+        <div id="passage-panel">
+            <!-- Passage content will be dynamically generated here -->
+        </div>
+
+        <!-- Right Panel: Questions -->
+        <div id="question-panel">
+            <!-- Questions will be dynamically generated here -->
+        </div>
+    </div>
+</div>
+
+<!-- Help and End Section Buttons -->
+<button id="help-button" onclick="showHelp()" style="display:none;">Help</button>
+<button id="end-section-button" onclick="submitExam()" style="display:none;">End Section</button>
+
+<!-- Review Screen -->
+<div id="review-screen">
+    <h2>Review Questions</h2>
+    <div id="review-list">
+        <!-- Review items will be populated here -->
+    </div>
+    <button onclick="closeReview()" class="button">Close Review</button>
+</div>
+
+
+<!-- JavaScript -->
+<script>
+    // State Variables
+    let currentPassageIndex = 0;        // 0 or 1 (two passages)
+    let currentQuestionIndex = 0;       // 0..9 per passage (10 questions each)
+    let userAnswers = {};              // e.g. userAnswers["0-2"] = "A"
+    let flaggedQuestions = [];
+    let data = {
+        passages: [
+            {% for passage in passages %}
+                {
+                    title: "{{ passage.title|escapejs }}",
+                    paragraphs: [
+                        {% for paragraph in passage.paragraphs %}
+                            {
+                                id: {{ paragraph.id }},
+                                text: "{{ paragraph.text|escapejs }}"
+                            }{% if not forloop.last %},{% endif %}
+                        {% endfor %}
+                    ],
+                    questions: [
+                        {% for question in passage.questions %}
+                            {
+                                number: {{ question.number }},
+                                type: "{{ question.type|escapejs }}",
+                                paragraphRefs: {{ question.paragraphRefs|safe }},
+                                instructions: "{{ question.instructions|escapejs }}",
+                                stem: "{{ question.stem|escapejs }}",
+                                choices: [
+                                    {% for choice in question.choices %}
+                                        {
+                                            value: "{{ choice.value|escapejs }}",
+                                            text: "{{ choice.text|escapejs }}"
+                                        }{% if not forloop.last %},{% endif %}
+                                    {% endfor %}
+                                ],
+                                correctAnswer: {{ question.correctAnswer|safe }}
+                            }{% if not forloop.last %},{% endif %}
+                        {% endfor %}
+                    ]
+                }{% if not forloop.last %},{% endif %}
+            {% empty %}
+                // Empty array case
+            {% endfor %}
+        ]
+    };
+    // let data = {
+    //     passages: [
+    //         {% for passage in passages %}
+    //             {
+    //                 title: "{{ passage.title|escapejs }}"
+    //             }{% if not forloop.last %},{% endif %}
+    //         {% empty %}
+    //             // Either leave empty array:
+    //             {% comment %}Empty array case{% endcomment %}
+    //         {% endfor %}
+    //     ]
+    // };
+    let totalPassages = data.length; // Should be 2
+    let totalQuestionsPerPassage = data.passages[0].questions.length; // 10
+
+    let readingStarted = false;
+
+    // Timer (36 minutes total)
+    let timeRemaining = 36 * 60;
+    const timerElement = document.getElementById('time');
+
+    window.onload = function() {
+        // Hide container initially, show instructions
+        document.getElementById('instructions-screen').style.display = 'block';
+        // We can hide "Help" and "End Section" until the reading actually starts
+    };
+    // Timer
+    function startTimer() {
+        if (readingStarted) return; // Avoid multiple intervals
+        readingStarted = true;
+
+        const timerInterval = setInterval(() => {
+            if(timeRemaining <= 0) {
+                clearInterval(timerInterval);
+                submitExam(); // Time up
+                return;
+            }
+            timeRemaining--;
+            updateTimerDisplay();
+        }, 1000);
+    }
+
+    function updateTimerDisplay() {
+        let minutes = Math.floor(timeRemaining / 60);
+        let seconds = timeRemaining % 60;
+        timerElement.textContent = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+    }
+
+    // Navigation
+    function showInstructions() {
+        // Already showing, no need
+    }
+
+    function goNext() {
+        // If user is on instructions, show first passage
+        if(!readingStarted) {
+            document.getElementById('instructions-screen').style.display = 'none';
+            document.getElementById('container').style.display = 'flex';
+            document.getElementById('help-button').style.display = 'inline-block';
+            document.getElementById('end-section-button').style.display = 'inline-block';
+
+            // Load first passage
+            currentPassageIndex = 0;
+            currentQuestionIndex = 0;
+            populatePassage(currentPassageIndex);
+            populateQuestion(currentPassageIndex, currentQuestionIndex);
+            document.getElementById('progress').innerText = `Passage ${currentPassageIndex+1} of ${totalPassages}`;
+            startTimer();
+            return;
+        }
+
+        // Move to next question
+        const totalQuestionsThisPassage = data.passages[currentPassageIndex].questions.length;
+        if(currentQuestionIndex < totalQuestionsThisPassage - 1) {
+            currentQuestionIndex++;
+            populateQuestion(currentPassageIndex, currentQuestionIndex);
+        } else {
+            // We finished the 10 questions for this passage
+            // Move to next passage if available
+            if(currentPassageIndex < totalPassages - 1) {
+                currentPassageIndex++;
+                currentQuestionIndex = 0;
+                populatePassage(currentPassageIndex);
+                populateQuestion(currentPassageIndex, currentQuestionIndex);
+                document.getElementById('progress').innerText = `Passage ${currentPassageIndex+1} of ${totalPassages}`;
+            } else {
+                // No more passages -> we've finished everything
+                submitExam();
+            }
+        }
+    }
+
+    function goBack() {
+        // If on the first question of the first passage, do nothing
+        if(currentPassageIndex === 0 && currentQuestionIndex === 0) {
+            return;
+        }
+        if(currentQuestionIndex > 0) {
+            currentQuestionIndex--;
+            populateQuestion(currentPassageIndex, currentQuestionIndex);
+        } else {
+            // Move to previous passage's last question
+            currentPassageIndex--;
+            currentQuestionIndex = data.passages[currentPassageIndex].questions.length - 1;
+            populatePassage(currentPassageIndex);
+            populateQuestion(currentPassageIndex, currentQuestionIndex);
+            document.getElementById('progress').innerText = `Passage ${currentPassageIndex+1} of ${totalPassages}`;
+        }
+    }
+
+    // Populate passage
+    function populatePassage(passageIdx) {
+        const passagePanel = document.getElementById('passage-panel');
+        passagePanel.innerHTML = '';
+
+        const passageData = data.passages[passageIdx];
+        passageData.paragraphs.forEach(par => {
+            const pElement = document.createElement('p');
+            pElement.id = `paragraph-${par.id}`;
+            pElement.innerHTML = `<span class="paragraph-number">${par.id}.</span> ${par.text}`;
+            passagePanel.appendChild(pElement);
+        });
+    }
+
+    // Populate question
+    function populateQuestion(passageIdx, questionIdx) {
+        const questionPanel = document.getElementById('question-panel');
+        questionPanel.innerHTML = '';
+
+        const questionData = data.passages[passageIdx].questions[questionIdx];
+
+        const questionDiv = document.createElement('div');
+        questionDiv.className = 'question';
+        questionDiv.id = `question-${questionData.number}`;
+
+        // Highlight relevant paragraph(s)
+        highlightParagraphs(questionData.paragraphRefs);
+
+        // Question header
+        const h3 = document.createElement('h3');
+        h3.textContent = `Question ${questionData.number}`;
+        questionDiv.appendChild(h3);
+
+        // Possibly instructions
+        if(questionData.instructions) {
+            const pInstructions = document.createElement('p');
+            pInstructions.innerHTML = questionData.instructions;
+            questionDiv.appendChild(pInstructions);
+        }
+
+        // Question stem
+        const pQuestion = document.createElement('p');
+        pQuestion.innerHTML = questionData.stem;
+        questionDiv.appendChild(pQuestion);
+
+        // Render choices or special question type
+        if(questionData.type === 'single-choice') {
+            // Create single-choice options
+            const ulOptions = document.createElement('ul');
+            ulOptions.className = 'options';
+            questionData.choices.forEach((choice, index) => {
+                const li = document.createElement('li');
+                const inputOption = document.createElement('input');
+                inputOption.type = 'radio';
+                inputOption.name = `q${questionData.number}`;
+                inputOption.id = `q${questionData.number}${String.fromCharCode(97 + index)}`;
+                inputOption.value = choice.value;
+
+                // restore user’s previous choice if any
+                if (userAnswers[`${passageIdx}-${questionIdx}`] === choice.value) {
+                    inputOption.checked = true;
+                }
+
+                inputOption.addEventListener('change', function() {
+                    userAnswers[`${passageIdx}-${questionIdx}`] = this.value;
+                });
+
+                const labelOption = document.createElement('label');
+                labelOption.htmlFor = inputOption.id;
+                labelOption.textContent = ` ${choice.text}`;
+
+                li.appendChild(inputOption);
+                li.appendChild(labelOption);
+                ulOptions.appendChild(li);
+            });
+            questionDiv.appendChild(ulOptions);
+
+        } else if (questionData.type === 'multiple-select') {
+            // For multiple correct answers (summary or multi-answer)
+            // This could involve checkboxes or drag-and-drop
+            // Here we’ll do checkboxes for demonstration
+            const ulOptions = document.createElement('ul');
+            ulOptions.className = 'options';
+            questionData.choices.forEach((choice, index) => {
+                const li = document.createElement('li');
+                const inputOption = document.createElement('input');
+                inputOption.type = 'checkbox';
+                inputOption.name = `q${questionData.number}`;
+                inputOption.id = `q${questionData.number}${String.fromCharCode(97 + index)}`;
+                inputOption.value = choice.value;
+
+                // restore user’s previous selections if any
+                if (Array.isArray(userAnswers[`${passageIdx}-${questionIdx}`]) &&
+                    userAnswers[`${passageIdx}-${questionIdx}`].includes(choice.value)) {
+                    inputOption.checked = true;
+                }
+
+                inputOption.addEventListener('change', function() {
+                    if(!Array.isArray(userAnswers[`${passageIdx}-${questionIdx}`])) {
+                        userAnswers[`${passageIdx}-${questionIdx}`] = [];
+                    }
+                    if(this.checked) {
+                        userAnswers[`${passageIdx}-${questionIdx}`].push(this.value);
+                    } else {
+                        const idx = userAnswers[`${passageIdx}-${questionIdx}`].indexOf(this.value);
+                        if(idx >= 0) userAnswers[`${passageIdx}-${questionIdx}`].splice(idx, 1);
+                    }
+                });
+
+                const labelOption = document.createElement('label');
+                labelOption.htmlFor = inputOption.id;
+                labelOption.textContent = ` ${choice.text}`;
+
+                li.appendChild(inputOption);
+                li.appendChild(labelOption);
+                ulOptions.appendChild(li);
+            });
+            questionDiv.appendChild(ulOptions);
+
+        }
+        // ... other question types if needed (drag-drop, sentence insertion, etc.) ...
+
+        // Flag button
+        const flagButton = document.createElement('button');
+        flagButton.className = 'flag-button';
+        flagButton.textContent = flaggedQuestions.includes(`${passageIdx}-${questionIdx}`) ? 'Unflag' : 'Flag';
+        flagButton.onclick = function() {
+            const key = `${passageIdx}-${questionIdx}`;
+            if(!flaggedQuestions.includes(key)) {
+                flaggedQuestions.push(key);
+                alert(`Question ${questionData.number} flagged.`);
+            } else {
+                flaggedQuestions = flaggedQuestions.filter(f => f !== key);
+                alert(`Flag removed from Question ${questionData.number}.`);
+            }
+            flagButton.textContent = flaggedQuestions.includes(key) ? 'Unflag' : 'Flag';
+        };
+        questionDiv.appendChild(flagButton);
+
+        questionPanel.appendChild(questionDiv);
+
+        // Add navigation buttons
+        const navDiv = document.createElement('div');
+        navDiv.className = 'navigation-buttons';
+
+        const backBtn = document.createElement('button');
+        backBtn.textContent = 'Back';
+        backBtn.onclick = goBack;
+        // Disable if on the first question of the first passage
+        if(currentPassageIndex === 0 && currentQuestionIndex === 0) {
+            backBtn.disabled = true;
+        }
+        navDiv.appendChild(backBtn);
+
+        const nextBtn = document.createElement('button');
+        nextBtn.textContent = (currentPassageIndex === totalPassages - 1 && currentQuestionIndex === totalQuestionsPerPassage - 1) ? 'Submit' : 'Next';
+        nextBtn.onclick = function() {
+            // If we are at the final question of final passage, we might label it "Submit"
+            if(nextBtn.textContent === 'Submit') {
+                submitExam();
+            } else {
+                goNext();
+            }
+        };
+        navDiv.appendChild(nextBtn);
+
+        questionPanel.appendChild(navDiv);
+    }
+
+    // Highlight paragraphs
+    function highlightParagraphs(parRefs) {
+        // First clear old highlights
+        document.querySelectorAll('#passage-panel p').forEach(p => {
+            p.classList.remove('highlighted-paragraph');
+        });
+        if(!parRefs || parRefs.length === 0) return;
+        // Add highlight
+        parRefs.forEach(parId => {
+            const parEl = document.getElementById(`paragraph-${parId}`);
+            if(parEl) parEl.classList.add('highlighted-paragraph');
+        });
+    }
+
+    // Review
+    function showReview() {
+        document.getElementById('review-screen').style.display = 'block';
+        const reviewList = document.getElementById('review-list');
+        reviewList.innerHTML = '';
+
+        // We'll list all passages, all questions
+        data.passages.forEach((passage, pIndex) => {
+            passage.questions.forEach((q, qIndex) => {
+                const key = `${pIndex}-${qIndex}`;
+                const answered = userAnswers[key] ? 'Answered' : 'Unanswered';
+                const flagged = flaggedQuestions.includes(key) ? ' (Flagged)' : '';
+                const divItem = document.createElement('div');
+                divItem.className = 'review-item';
+                divItem.textContent = `Passage ${pIndex+1}, Q${q.number}: ${answered}${flagged}`;
+                divItem.onclick = function() {
+                    // Jump to that question
+                    currentPassageIndex = pIndex;
+                    currentQuestionIndex = qIndex;
+                    populatePassage(currentPassageIndex);
+                    populateQuestion(currentPassageIndex, currentQuestionIndex);
+                    document.getElementById('progress').innerText = `Passage ${currentPassageIndex+1} of ${totalPassages}`;
+                    closeReview();
+                };
+                reviewList.appendChild(divItem);
+            });
+        });
+    }
+
+    function closeReview() {
+        document.getElementById('review-screen').style.display = 'none';
+    }
+
+    // Help
+    function showHelp() {
+        alert('General test-taking guidance goes here.\nYou can skip questions and review them later.');
+    }
+
+    // Submit
+    function submitExam() {
+        // End the test
+        alert('Reading Section Completed! Submitting your answers...');
+        // Optionally do something else: show score, or redirect, etc.
+        // For now we just hide everything
+        document.getElementById('container').style.display = 'none';
+        document.getElementById('help-button').style.display = 'none';
+        document.getElementById('end-section-button').style.display = 'none';
+        document.getElementById('instructions-screen').innerHTML = '<h2>Thank you!</h2><p>Your Reading Section has been submitted.</p>';
+        document.getElementById('instructions-screen').style.display = 'block';
+    }
+</script>
+</body>
+</html>

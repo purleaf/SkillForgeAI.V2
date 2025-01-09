@@ -1,0 +1,761 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TOEFL iBT Writing Section - SkillForgeAI</title>
+    <!-- Include Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Include Font Awesome (icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+          referrerpolicy="no-referrer"/>
+    <style>
+        /* General Styles */
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+            background: linear-gradient(135deg, #ADD8E6 0%, #E6E6FA 50%, #FFDAB9 100%);
+            background-attachment: fixed;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Overlay Wavy Lines */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080"><defs><pattern id="pattern" patternUnits="userSpaceOnUse" width="100" height="100"><path d="M0 50 Q 25 0 50 50 T 100 50" fill="none" stroke="white" stroke-width="2" opacity="0.5"/></pattern></defs><rect width="1920" height="1080" fill="url(%23pattern)"/></svg>');
+            opacity: 0.7;
+            z-index: -1;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        .navbar .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+        }
+
+        .navbar ul {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            list-style: none;
+            margin: 0;
+        }
+
+        .navbar li {
+            margin-left: 30px;
+        }
+
+        .navbar a {
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+            position: relative;
+            padding: 8px 12px;
+            border-radius: 10px;
+            transition: background 0.3s;
+        }
+
+        .navbar a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Dropdown Menu */
+        .navbar .dropdown-menu {
+            display: none;
+            position: absolute;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            margin-top: 10px;
+            min-width: 150px;
+            z-index: 999;
+        }
+
+        .navbar .dropdown-menu a {
+            display: block;
+            padding: 10px 20px;
+            white-space: nowrap;
+        }
+
+        .navbar .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+        /* Main Content */
+        #main-content {
+            padding: 20px;
+            margin-top: 80px; /* Adjust according to navbar height */
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Header Section */
+        #header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 15px 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(15px);
+        }
+
+        #header div {
+            font-size: 16px;
+            color: #333;
+        }
+
+        #header button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            background-color: #00acc1;
+            color: #fff;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+
+        #header button:hover {
+            background-color: #0097a7;
+        }
+
+        /* Instruction Section */
+        #instructions {
+            display: none;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(15px);
+            text-align: center;
+        }
+
+        #instructions h2 {
+            margin-bottom: 20px;
+            font-size: 24px;
+            color: #333;
+        }
+
+        #instructions p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        /* Integrated Writing Section */
+        #integrated-writing {
+            display: none;
+        }
+
+        #integrated-writing .content-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        /* Left Panel: Reading Passage */
+        #reading-passage-panel {
+            flex: 1;
+            min-width: 300px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(15px);
+            overflow-y: auto;
+            max-height: 400px;
+        }
+
+        #reading-passage-panel h3 {
+            margin-bottom: 15px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        #reading-passage-panel p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+
+        /* Right Panel: Writing Box */
+        #writing-box-panel {
+            flex: 1.5;
+            min-width: 400px;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(15px);
+        }
+
+        #writing-box-panel h3 {
+            margin-bottom: 15px;
+            color: #333;
+            font-weight: bold;
+        }
+
+        #writing-box-panel .toolbar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        #writing-box-panel .toolbar button {
+            padding: 8px;
+            border: none;
+            border-radius: 8px;
+            background-color: #00acc1;
+            color: #fff;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+
+        #writing-box-panel .toolbar button:hover {
+            background-color: #0097a7;
+        }
+
+        #writing-box {
+            width: 100%;
+            height: 200px;
+            resize: vertical;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        #word-count {
+            margin-top: 10px;
+            text-align: right;
+            font-size: 14px;
+            color: #333;
+        }
+
+        /* Independent Writing Section */
+        #independent-writing {
+            display: none;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(15px);
+        }
+
+        #independent-writing h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        #discussion-text {
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        #discussion-text strong {
+            color: #333;
+        }
+
+        .response-box {
+            margin-bottom: 20px;
+        }
+
+        .response-box h4 {
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .response-box p {
+            margin-bottom: 15px;
+            line-height: 1.4;
+        }
+
+        #independent-writing .toolbar {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+
+        #independent-writing .toolbar button {
+            padding: 8px;
+            border: none;
+            border-radius: 8px;
+            background-color: #00acc1;
+            color: #fff;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+
+        #independent-writing .toolbar button:hover {
+            background-color: #0097a7;
+        }
+
+        #independent-response {
+            width: 100%;
+            height: 150px;
+            resize: vertical;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            outline: none;
+        }
+
+        #independent-word-count {
+            margin-top: 10px;
+            text-align: right;
+            font-size: 14px;
+            color: #333;
+        }
+
+        /* End of Exam Section */
+        #end-of-exam {
+            display: none;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(15px);
+            text-align: center;
+        }
+
+        #end-of-exam h2 {
+            margin-bottom: 20px;
+        }
+
+        /* Navigation Buttons (bottom) */
+        #navigation-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        #navigation-buttons button {
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #333;
+            transition: background 0.3s;
+        }
+
+        #navigation-buttons button:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+
+        #navigation-buttons button:disabled {
+            background: rgba(255, 255, 255, 0.5);
+            cursor: not-allowed;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            #reading-passage-panel {
+                max-height: 200px;
+            }
+            #writing-box {
+                height: 150px;
+            }
+            #independent-response {
+                height: 120px;
+            }
+        }
+
+    </style>
+</head>
+<body>
+<!-- Navigation Bar -->
+<nav class="navbar">
+    <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+        <span class="logo">SkillForgeAI</span>
+        <ul>
+            <li><a href="{% url 'main_page' %}">Home</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#ai">AI Technology</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#faqs">FAQs</a></li>
+            <li><a href="#contact">Contact</a></li>
+            {% if user.is_authenticated %}
+            <!-- If user is logged in, show account dropdown -->
+            <li class="dropdown">
+                <a href="javascript:void(0)">
+                    {{ user.username }}
+                </a>
+                <div class="dropdown-menu">
+                    <a href="{% url 'account_settings' %}">Account Settings</a>
+                    <a href="{% url 'logout' %}">Logout</a>
+                </div>
+            </li>
+            {% else %}
+            <!-- If user is not logged in, show login and sign up buttons -->
+            <li><a href="{% url 'login' %}" class="button">Login</a></li>
+            <li><a href="#" class="button modal-button" data-modal="signup-modal">Sign Up</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<div id="main-content" class="container">
+    <!-- Header Section -->
+    <div id="header">
+        <div id="timer">Time Remaining: <span id="time">0:00:00</span></div>
+        <div style="display:flex; gap:10px;">
+            <button id="save-exit-button" onclick="saveAndExit()">Save &amp; Exit</button>
+            <button id="next-button" onclick="showInstructions()">Next</button>
+        </div>
+    </div>
+
+    <!-- Instruction Section -->
+    <div id="instructions">
+        <h2 id="instructions-heading">...</h2>
+        <div id="instructions-body"></div>
+    </div>
+
+    <!-- Integrated Writing Section -->
+    <div id="integrated-writing">
+        <h2 id="integrated-title">Integrated Writing Task</h2>
+        <div class="content-container">
+            <!-- Left: Reading Passage -->
+            <div id="reading-passage-panel">
+                <h3 id="reading-heading">Reading Passage</h3>
+                <div id="reading-text"></div>
+            </div>
+
+            <!-- Right: Writing Box -->
+            <div id="writing-box-panel">
+                <h3 id="summary-heading">Your Summary</h3>
+                <div class="toolbar">
+                    <!-- Basic editing tools (example placeholders) -->
+                    <button onclick="cutText('writing-box')"><i class="fas fa-cut"></i></button>
+                    <button onclick="copyText('writing-box')"><i class="fas fa-copy"></i></button>
+                    <button onclick="pasteText('writing-box')"><i class="fas fa-paste"></i></button>
+                    <button onclick="undoText('writing-box')"><i class="fas fa-undo"></i></button>
+                    <button onclick="redoText('writing-box')"><i class="fas fa-redo"></i></button>
+                </div>
+                <textarea id="writing-box" oninput="updateWordCount('writing-box','word-count')"></textarea>
+                <div id="word-count">Words: 0</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Independent Writing Section -->
+    <div id="independent-writing">
+        <h2 id="independent-title">Independent Writing Task</h2>
+        <h3 id="discussion-heading">Class Discussion Prompt</h3>
+        <div id="discussion-text">
+            <!-- Professor & classmate responses will be injected here -->
+        </div>
+        <h3 id="your-response-heading">Your Response</h3>
+        <div class="toolbar">
+            <!-- Basic editing tools (example placeholders) -->
+            <button onclick="cutText('independent-response')"><i class="fas fa-cut"></i></button>
+            <button onclick="copyText('independent-response')"><i class="fas fa-copy"></i></button>
+            <button onclick="pasteText('independent-response')"><i class="fas fa-paste"></i></button>
+            <button onclick="undoText('independent-response')"><i class="fas fa-undo"></i></button>
+            <button onclick="redoText('independent-response')"><i class="fas fa-redo"></i></button>
+        </div>
+        <textarea id="independent-response" oninput="updateWordCount('independent-response','independent-word-count')"></textarea>
+        <div id="independent-word-count">Words: 0</div>
+    </div>
+
+    <!-- End of Exam Section -->
+    <div id="end-of-exam">
+        <h2 id="end-exam-title">End of Exam</h2>
+        <p id="end-exam-message">...</p>
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div id="navigation-buttons">
+        <button id="back-button" onclick="goBack()" disabled>Back</button>
+        <button id="next-task-button" onclick="goNext()">Next</button>
+        <button id="submit-button" onclick="submitExam()" style="display:none;">Submit</button>
+    </div>
+</div>
+
+<!-- JavaScript -->
+<script>
+    // State Management
+    let currentStep = 0;
+    // 0 = instruction screen
+    // 1 = integrated writing
+    // 2 = independent writing
+    // 3 = end of exam
+
+    let totalSeconds = 0; // Will load from JSON
+    let timerInterval = null;
+
+    // We'll store JSON data here after fetch
+    let writingData = {};
+
+    window.onload = function() {
+        // Initially hide sections
+        document.getElementById('instructions').style.display = 'none';
+        document.getElementById('integrated-writing').style.display = 'none';
+        document.getElementById('independent-writing').style.display = 'none';
+        document.getElementById('end-of-exam').style.display = 'none';
+
+        // Fetch JSON data
+        fetch("{% static 'practice/writing_data.json' %}")
+            .then(response => {
+                if (!response.ok) throw new Error(`HTTP error! Status: ${response.status}`);
+                return response.json();
+            })
+            .then(data => {
+                writingData = data;
+                // Once data is ready, initialize interface
+                initializeWritingSection();
+            })
+            .catch(error => {
+                console.error('Error fetching writing_data.json:', error);
+                alert('An error occurred while loading the writing data.');
+            });
+    };
+
+    function initializeWritingSection() {
+        // 1) Instructions content
+        document.getElementById('instructions-heading').textContent = writingData.instructions.heading;
+        const instructionsBody = document.getElementById('instructions-body');
+        instructionsBody.innerHTML = ''; // Clear any placeholder
+        writingData.instructions.introParagraphs.forEach(par => {
+            const pEl = document.createElement('p');
+            pEl.textContent = par;
+            instructionsBody.appendChild(pEl);
+        });
+        const pEndNote = document.createElement('p');
+        pEndNote.textContent = writingData.instructions.endNote;
+        instructionsBody.appendChild(pEndNote);
+
+        // 2) Integrated
+        document.getElementById('integrated-title').textContent = writingData.integrated.title;
+        document.getElementById('reading-heading').textContent = writingData.integrated.readingHeading;
+        document.getElementById('reading-text').innerHTML = ''; // clear
+        writingData.integrated.readingText.forEach(par => {
+            const pEl = document.createElement('p');
+            pEl.textContent = par;
+            document.getElementById('reading-text').appendChild(pEl);
+        });
+        document.getElementById('summary-heading').textContent = writingData.integrated.summaryHeading;
+
+        // 3) Independent
+        document.getElementById('independent-title').textContent = writingData.independent.title;
+        document.getElementById('discussion-heading').textContent = writingData.independent.discussionHeading;
+        const discussionText = document.getElementById('discussion-text');
+        discussionText.innerHTML = ''; // clear
+
+        // Insert professor's post
+        const profPar = document.createElement('p');
+        profPar.innerHTML = '<strong>Professor\'s Post:</strong> ' + writingData.independent.professorPost;
+        discussionText.appendChild(profPar);
+
+        // Insert classmates' responses
+        writingData.independent.responses.forEach(resp => {
+            const divResp = document.createElement('div');
+            divResp.className = 'response-box';
+
+            const h4Author = document.createElement('h4');
+            h4Author.textContent = resp.author + ':';
+            divResp.appendChild(h4Author);
+
+            const pRespText = document.createElement('p');
+            pRespText.textContent = resp.text;
+            divResp.appendChild(pRespText);
+
+            discussionText.appendChild(divResp);
+        });
+        document.getElementById('your-response-heading').textContent = writingData.independent.yourResponseHeading;
+
+        // 4) End of exam
+        document.getElementById('end-exam-title').textContent = writingData.endOfExam.title;
+        document.getElementById('end-exam-message').textContent = writingData.endOfExam.message;
+
+        // 5) Timer minutes from JSON
+        totalSeconds = (writingData.timerMinutes || 30) * 60;
+        updateTimerDisplay();
+
+        // Show instructions by default
+        showInstructions();
+
+        // Start the timer now that we have all data
+        startTimer();
+    }
+
+    // Timer
+    function startTimer() {
+        if (timerInterval) clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+            if(totalSeconds <= 0){
+                clearInterval(timerInterval);
+                // Force submission if time runs out
+                submitExam();
+                return;
+            }
+            totalSeconds--;
+            updateTimerDisplay();
+        }, 1000);
+    }
+
+    function updateTimerDisplay() {
+        const timerElement = document.getElementById('time');
+        let minutes = Math.floor(totalSeconds / 60);
+        let seconds = totalSeconds % 60;
+        timerElement.innerHTML = `${minutes}:${seconds < 10 ? '0'+seconds : seconds}`;
+    }
+
+    // Navigation
+    function showInstructions() {
+        document.getElementById('instructions').style.display = 'block';
+        document.getElementById('integrated-writing').style.display = 'none';
+        document.getElementById('independent-writing').style.display = 'none';
+        document.getElementById('end-of-exam').style.display = 'none';
+
+        document.getElementById('back-button').disabled = true;
+        document.getElementById('next-task-button').style.display = 'inline-block';
+        document.getElementById('submit-button').style.display = 'none';
+        currentStep = 0;
+    }
+
+    function goNext() {
+        if (currentStep === 0) {
+            // Move to Integrated
+            document.getElementById('instructions').style.display = 'none';
+            document.getElementById('integrated-writing').style.display = 'block';
+            document.getElementById('independent-writing').style.display = 'none';
+            document.getElementById('end-of-exam').style.display = 'none';
+
+            document.getElementById('back-button').disabled = false;
+            document.getElementById('next-task-button').innerText = 'Next';
+            currentStep = 1;
+        } else if (currentStep === 1) {
+            // Move to Independent
+            document.getElementById('instructions').style.display = 'none';
+            document.getElementById('integrated-writing').style.display = 'none';
+            document.getElementById('independent-writing').style.display = 'block';
+            document.getElementById('end-of-exam').style.display = 'none';
+
+            currentStep = 2;
+        } else if (currentStep === 2) {
+            // Move to End
+            document.getElementById('instructions').style.display = 'none';
+            document.getElementById('integrated-writing').style.display = 'none';
+            document.getElementById('independent-writing').style.display = 'none';
+            document.getElementById('end-of-exam').style.display = 'block';
+
+            document.getElementById('next-task-button').style.display = 'none';
+            document.getElementById('submit-button').style.display = 'inline-block';
+            currentStep = 3;
+        }
+    }
+
+    function goBack() {
+        if (currentStep === 1) {
+            // Back to instructions
+            showInstructions();
+        } else if (currentStep === 2) {
+            // Back to integrated
+            document.getElementById('instructions').style.display = 'none';
+            document.getElementById('integrated-writing').style.display = 'block';
+            document.getElementById('independent-writing').style.display = 'none';
+            document.getElementById('end-of-exam').style.display = 'none';
+
+            document.getElementById('next-task-button').style.display = 'inline-block';
+            document.getElementById('submit-button').style.display = 'none';
+            document.getElementById('next-task-button').innerText = 'Next';
+            currentStep = 1;
+        } else if (currentStep === 3) {
+            // Back to independent
+            document.getElementById('instructions').style.display = 'none';
+            document.getElementById('integrated-writing').style.display = 'none';
+            document.getElementById('independent-writing').style.display = 'block';
+            document.getElementById('end-of-exam').style.display = 'none';
+
+            document.getElementById('next-task-button').style.display = 'inline-block';
+            document.getElementById('submit-button').style.display = 'none';
+            document.getElementById('next-task-button').innerText = 'Next';
+            currentStep = 2;
+        }
+    }
+
+    // Editing Tools (demo placeholders)
+    function cutText(textareaId) {
+        const textarea = document.getElementById(textareaId);
+        textarea.select();
+        document.execCommand('cut');
+    }
+
+    function copyText(textareaId) {
+        const textarea = document.getElementById(textareaId);
+        textarea.select();
+        document.execCommand('copy');
+    }
+
+    function pasteText(textareaId) {
+        const textarea = document.getElementById(textareaId);
+        textarea.focus();
+        document.execCommand('paste');
+    }
+
+    function undoText(textareaId) {
+        document.execCommand('undo');
+    }
+
+    function redoText(textareaId) {
+        document.execCommand('redo');
+    }
+
+    // Word Count
+    function updateWordCount(textareaId, countElementId) {
+        const text = document.getElementById(textareaId).value.trim();
+        const words = text.split(/\s+/).filter(word => word.length > 0);
+        const countElement = document.getElementById(countElementId);
+        countElement.textContent = `Words: ${words.length}`;
+    }
+
+    // Save & Exit
+    function saveAndExit() {
+        // Implement your save logic here (e.g., AJAX POST to your Django view)
+        alert("Your responses have been saved. You can safely exit now.");
+    }
+
+    // Final Submission
+    function submitExam() {
+        // Implement your final submission logic here
+        if (timerInterval) clearInterval(timerInterval);
+        alert("Exam submitted successfully!");
+        // Optionally redirect or display a results page
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,340 @@
+{% load socialaccount %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SkillForgeAI | Login/SignUp</title>
+    <style>
+        /* Include the same styles from your main page here */
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+            background: linear-gradient(135deg, #ADD8E6 0%, #E6E6FA 50%, #FFDAB9 100%);
+            background-attachment: fixed;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;charset=UTF-8,<svg ...>'); /* The pattern from your main page */
+            opacity: 1;
+            z-index: -1;
+        }
+
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        h1, h2, h3, h4 {
+            margin: 0;
+            font-weight: 700;
+        }
+
+        p {
+            margin: 0;
+            color: #666;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 40px 0;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            backdrop-filter: blur(15px);
+            box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+            color: #333;
+            padding: 30px;
+            margin: 20px 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .heading {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .heading h2 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: #111;
+        }
+
+        .social-login {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .social-btn {
+            display: flex;
+            align-items: center;
+            padding: 14px;
+            border-radius: 50px;
+            border: 1px solid #ddd;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            background: white;
+            color: #333;
+            transition: background 0.3s;
+        }
+
+        .social-btn:hover {
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        .social-btn img {
+            width: 24px;
+            height: 24px;
+            margin-right: 12px;
+        }
+
+        .divider {
+            text-align: center;
+            margin: 20px 0;
+            position: relative;
+            font-size: 14px;
+            color: #666;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 40%;
+            height: 1px;
+            background: #ccc;
+        }
+
+        .divider::before {
+            left: 0;
+        }
+
+        .divider::after {
+            right: 0;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        input[type="email"],
+        input[type="password"] {
+            width: 100%;
+            padding: 14px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            background: rgba(255, 255, 255, 0.4);
+            font-size: 16px;
+            color: #333;
+        }
+
+        input::placeholder {
+            color: #aaa;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .forgot-link {
+            position: absolute;
+            top: 50%;
+            right: 10px;
+            transform: translateY(-50%);
+            font-size: 14px;
+            color: #555;
+        }
+
+        .action-btn {
+            padding: 14px;
+            border-radius: 30px;
+            border: none;
+            background: rgba(173, 216, 230, 0.8);
+            color: #333;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s;
+            text-align: center;
+        }
+
+        .action-btn:hover {
+            background: rgba(173, 216, 230, 1);
+        }
+
+        .switch-mode {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        .switch-mode a {
+            color: #333;
+            font-weight: 600;
+        }
+
+        .terms {
+            font-size: 12px;
+            color: #999;
+            text-align: center;
+            margin-top: 20px;
+            line-height: 1.4;
+        }
+
+        /* Toggle between Login and Sign Up */
+        .hidden {
+            display: none;
+        }
+
+        .mode-title {
+            font-weight: 700;
+            color: #111;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+
+        .instructions {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .social-container {
+            text-align: left;
+        }
+
+        .signup-instructions {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="glass-card">
+        <div class="heading">
+            <h2 id="form-title">Login/SignUp</h2>
+        </div>
+        <!-- Social Login Buttons -->
+        <div class="social-login">
+            <a href="{% provider_login_url 'google' process='login' %}">
+                <div class="social-btn" onclick="handleSocialLogin('google')">
+                    <img src="images/google-icon.png" alt="Google">
+                    Start with Google
+                </div>
+            </a>
+            <div class="social-btn" onclick="handleSocialLogin('facebook')">
+                <img src="images/facebook-icon.png" alt="Facebook">
+                Start with Facebook
+            </div>
+            <div class="social-btn" onclick="handleSocialLogin('apple')">
+                <img src="images/apple-icon.png" alt="Apple">
+                Start with Apple
+            </div>
+        </div>
+
+        <div class="divider">
+            OR
+        </div>
+
+        <!-- Login Form -->
+        <div id="login-form">
+            <h3 class="mode-title">Continue with Email</h3>
+            <form action="/login/" method="post">
+                {% csrf_token %}
+                <div class="input-group">
+                    <input type="email" name="email" placeholder="Email" required>
+                    <a href="/forgot-password" class="forgot-link">Forgot password?</a>
+                </div>
+                <input type="password" name="password" placeholder="Password" required>
+                <button type="submit" class="action-btn">LOGIN</button>
+            </form>
+            <div class="switch-mode">
+                No account? <a href="javascript:void(0)" onclick="toggleMode('signup')">Sign Up</a>
+            </div>
+            <div class="terms">
+                By logging in, you acknowledge that you have read and agree to SkillForgeAI’s <a href="#">Terms of
+                Use</a> and <a href="#">Privacy Policy</a>.
+            </div>
+        </div>
+
+        <!-- Sign Up Form -->
+        <div id="signup-form" class="hidden">
+            <h3 class="mode-title">Sign up with Email</h3>
+            <p class="signup-instructions">We'll send you a verification email. Remember to check your email to activate
+                your account.</p>
+            <form action="/signup/" method="post">
+                {% csrf_token %}
+                <input type="email" name="email" placeholder="Please enter your email" required>
+                <input type="password" name="password1" placeholder="Please enter your password" required>
+                <p style="font-size:12px; color:#999; margin-top:-10px; margin-bottom:10px;">Please include at least 1
+                    alphabetical letter &amp; 1 number</p>
+                <input type="password" name="password2" placeholder="Please enter your password" required>
+                <button type="submit" class="action-btn">SEND EMAIL</button>
+            </form>
+            <div class="divider">OR</div>
+            <div class="social-btn" onclick="handleSocialLogin('google')">
+                <img src="images/google-icon.png" alt="Google">
+                Start with Google
+            </div>
+            <div class="switch-mode">
+                Already have an account? <a href="javascript:void(0)" onclick="toggleMode('login')">Login</a>
+            </div>
+            <div class="terms">
+                By signing up, you acknowledge that you have read and agree to SkillForgeAI’s <a href="#">Terms of
+                Use</a> and <a href="#">Privacy Policy</a>.
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function toggleMode(mode) {
+        const loginForm = document.getElementById('login-form');
+        const signupForm = document.getElementById('signup-form');
+        const formTitle = document.getElementById('form-title');
+
+        if (mode === 'signup') {
+            loginForm.classList.add('hidden');
+            signupForm.classList.remove('hidden');
+            formTitle.textContent = 'Sign Up';
+        } else {
+            signupForm.classList.add('hidden');
+            loginForm.classList.remove('hidden');
+            formTitle.textContent = 'Login';
+        }
+    }
+
+    function handleSocialLogin(provider) {
+        // Replace this with your actual social login flow
+        // e.g., redirect to Google OAuth: window.location.href = "/auth/google/"
+        alert('Social login with ' + provider + ' not implemented yet.');
+    }
+</script>
+</body>
+</html>

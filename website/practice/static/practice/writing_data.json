@@ -1,0 +1,41 @@
+{
+  "instructions": {
+    "heading": "TOEFL iBT Writing Section",
+    "introParagraphs": [
+      "In this section, you will complete two writing tasks:",
+      "Task 1 (Integrated Writing Task): You will read a passage and listen to a related lecture, then write a summary explaining how the lecture casts doubt on the main ideas of the reading. You should write between 150–225 words. You will have 20 minutes to complete this task.",
+      "Task 2 (Independent Writing Task): You will be presented with a professor's post and a few classmates' responses. Write an opinion-based response of at least 100 words, expressing your view and addressing the discussion. You will have 10 minutes for this task."
+    ],
+    "endNote": "Click 'Next' to begin the first task."
+  },
+  "integrated": {
+    "title": "Integrated Writing Task",
+    "readingHeading": "Reading Passage",
+    "readingText": [
+      "Malaria has been one of the most persistent diseases in human history, particularly in tropical regions. Researchers have discovered various strategies to combat the mosquitoes that carry the disease. Traditional methods include the widespread use of insecticides and distribution of protective bed nets to communities affected by malaria.",
+      "However, some scientists argue that more environmentally friendly solutions are necessary, such as genetically modifying mosquitoes to reduce their ability to transmit malaria parasites. These scientists believe that genetic modification could be more sustainable and less harmful to other species. Critics, on the other hand, worry about unintended consequences of releasing genetically modified insects into the wild, warning that such approaches might disrupt local ecosystems in unpredictable ways."
+    ],
+    "summaryHeading": "Your Summary"
+  },
+  "independent": {
+    "title": "Independent Writing Task",
+    "discussionHeading": "Class Discussion Prompt",
+    "professorPost": "Our next discussion is about the effects of job automation. Do you think it will lead to mass unemployment, or will it open opportunities for more specialized jobs? Share your perspective and support your opinion with examples.",
+    "responses": [
+      {
+        "author": "Alicia",
+        "text": "Automation is unstoppable. But instead of replacing humans entirely, it just changes the type of work people do. We'll need fewer manual laborers but more engineers and technicians."
+      },
+      {
+        "author": "Matthew",
+        "text": "Robots can handle repetitive tasks better than humans. I worry that many individuals won't adapt quickly enough to new job demands. Some help and policy changes will be necessary."
+      }
+    ],
+    "yourResponseHeading": "Your Response"
+  },
+  "endOfExam": {
+    "title": "End of Exam",
+    "message": "Thank you for completing the TOEFL Writing section. Please submit your responses now. You will not be able to make further changes once submitted."
+  },
+  "timerMinutes": 30
+}

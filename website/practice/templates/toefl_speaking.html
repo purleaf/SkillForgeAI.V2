@@ -1,0 +1,649 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>TOEFL iBT Speaking Section - SkillForgeAI</title>
+    <!-- Include Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Include Font Awesome (icons) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+          referrerpolicy="no-referrer"/>
+    <style>
+        /* General Styles (same design as your TOEFL Writing) */
+        body {
+            margin: 0;
+            font-family: 'Poppins', sans-serif;
+            color: #333;
+            background: linear-gradient(135deg, #ADD8E6 0%, #E6E6FA 50%, #FFDAB9 100%);
+            background-attachment: fixed;
+            overflow-x: hidden;
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('data:image/svg+xml;charset=UTF-8,<svg xmlns="http://www.w3.org/2000/svg" width="1920" height="1080"><defs><pattern id="pattern" patternUnits="userSpaceOnUse" width="100" height="100"><path d="M0 50 Q 25 0 50 50 T 100 50" fill="none" stroke="white" stroke-width="2" opacity="0.5"/></pattern></defs><rect width="1920" height="1080" fill="url(%23pattern)"/></svg>');
+            opacity: 0.7;
+            z-index: -1;
+        }
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        /* Navbar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.15);
+            padding: 20px;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            backdrop-filter: blur(15px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        .navbar .logo {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+        }
+        .navbar ul {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            list-style: none;
+            margin: 0;
+        }
+        .navbar li {
+            margin-left: 30px;
+        }
+        .navbar a {
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+            position: relative;
+            padding: 8px 12px;
+            border-radius: 10px;
+            transition: background 0.3s;
+        }
+        .navbar a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        .navbar .dropdown-menu {
+            display: none;
+            position: absolute;
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(15px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 10px;
+            margin-top: 10px;
+            min-width: 150px;
+            z-index: 999;
+        }
+        .navbar .dropdown-menu a {
+            display: block;
+            padding: 10px 20px;
+            white-space: nowrap;
+        }
+        .navbar .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+        /* Main Content Area */
+        #main-content {
+            padding: 20px;
+            margin-top: 80px; /* Adjust for navbar height */
+            max-width: 1200px;
+            margin-left: auto;
+            margin-right: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        /* Header Section: Timer and Nav Buttons */
+        #header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 15px 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(15px);
+        }
+        #header div {
+            font-size: 16px;
+            color: #333;
+        }
+        #header button {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 8px;
+            background-color: #00acc1;
+            color: #fff;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+        #header button:hover {
+            background-color: #0097a7;
+        }
+
+        /* Each Step Container */
+        .speaking-step {
+            display: none;
+            background: rgba(255, 255, 255, 0.15);
+            padding: 20px;
+            border-radius: 10px;
+            backdrop-filter: blur(15px);
+        }
+        .speaking-step h2, .speaking-step h3, .speaking-step p {
+            margin-bottom: 15px;
+        }
+
+        /* Timers/Labels */
+        .prep-timer, .resp-timer {
+            font-weight: bold;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        /* Navigation Buttons (bottom) */
+        #navigation-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+        #navigation-buttons button {
+            padding: 10px 20px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            color: #333;
+            transition: background 0.3s;
+        }
+        #navigation-buttons button:hover {
+            background: rgba(255, 255, 255, 0.4);
+        }
+        #navigation-buttons button:disabled {
+            background: rgba(255, 255, 255, 0.5);
+            cursor: not-allowed;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 768px) {
+            #header div {
+                font-size: 14px;
+            }
+            #navigation-buttons button {
+                font-size: 14px;
+                padding: 8px 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+<!-- Navigation Bar -->
+<nav class="navbar">
+    <div class="container" style="display: flex; justify-content: space-between; align-items: center;">
+        <span class="logo">SkillForgeAI</span>
+        <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#features">Features</a></li>
+            <li><a href="#ai">AI Technology</a></li>
+            <li><a href="#pricing">Pricing</a></li>
+            <li><a href="#faqs">FAQs</a></li>
+            <li><a href="#contact">Contact</a></li>
+            {% if user.is_authenticated %}
+            <!-- If user is logged in, show account dropdown -->
+            <li class="dropdown">
+                <a href="javascript:void(0)">
+                    {{ user.username }}
+                </a>
+                <div class="dropdown-menu">
+                    <a href="{% url 'account_settings' %}">Account Settings</a>
+                    <a href="{% url 'logout' %}">Logout</a>
+                </div>
+            </li>
+            {% else %}
+            <!-- If user is not logged in, show login and sign up buttons -->
+            <li><a href="{% url 'login' %}" class="button">Login</a></li>
+            <li><a href="#" class="button modal-button" data-modal="signup-modal">Sign Up</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>
+
+<!-- Main Content -->
+<div id="main-content" class="container">
+    <!-- Header Section -->
+    <div id="header">
+        <div id="timer">
+            Time Remaining: <span id="time">00:00</span>
+        </div>
+        <div style="display:flex; gap:10px;">
+            <button id="save-exit-button" onclick="saveAndExit()">Save &amp; Exit</button>
+            <button id="next-button" onclick="goNext()">Next</button>
+        </div>
+    </div>
+
+    <!-- Speaking Steps (Each step or sub-step is a .speaking-step) -->
+
+    <!-- STEP 0: Task 1 Instructions -->
+    <div id="step0" class="speaking-step">
+        <h2>Speaking Task 1</h2>
+        <p><strong>Directions:</strong> You will be asked a question about a familiar topic. You will then have 15 seconds
+            to prepare your response and 45 seconds to speak.</p>
+    </div>
+
+    <!-- STEP 1: Task 1 Question -->
+    <div id="step1" class="speaking-step">
+        <h2>Speaking Task 1 Prompt</h2>
+        <p>Some people believe that television has a negative impact on children and should be avoided. Others feel that
+            television is one of many ways a child can learn. Which do you believe?</p>
+        <p><strong>Preparation:</strong> 15 seconds<br>
+           <strong>Response:</strong> 60 seconds</p>
+        <div class="prep-timer">Preparation Time Left: <span id="task1-prep-timer">15</span>s</div>
+        <div class="resp-timer" style="display:none;">Recording... Time Left: <span id="task1-resp-timer">60</span>s</div>
+    </div>
+
+    <!-- STEP 2: Task 2 Instructions -->
+    <div id="step2" class="speaking-step">
+        <h2>Speaking Task 2</h2>
+        <p><strong>Directions:</strong> You will read a short paragraph and then listen to a conversation between two
+            people. You will have 50 seconds to read the paragraph. After, you will get a question about what you read
+            and heard. You will have 30 seconds to prepare your response and then 60 seconds to give it.</p>
+    </div>
+
+    <!-- STEP 3: Task 2 Reading -->
+    <div id="step3" class="speaking-step">
+        <h2>Speaking Task 2 Reading</h2>
+        <p><strong>You have 50 seconds to read</strong></p>
+        <p>
+            The library is in desperate need of more staff. The librarians are so overworked and exhausted.
+            They have to run around tired trying to help students, and everyone ends up waiting an extremely long time.
+            The library gets backed-up and no one wins. Even though there are some student workers, they are not much
+            use. They don't know what they're doing, so the librarians have to do all the work. The school should hire
+            some more professional librarians to assist our busy and crowded library as soon as possible. Remember
+            everyone, finals are just around the corner, and we need a functioning library before then!
+            <br><br>
+            Sincerely,<br>
+            Tamara Schull
+        </p>
+        <div class="prep-timer">Reading Timer: <span id="task2-reading-timer">50</span>s</div>
+    </div>
+
+    <!-- STEP 4: Task 2 Listening -->
+    <div id="step4" class="speaking-step">
+        <h2>Speaking Task 2 - Listening</h2>
+        <p>The conversation audio is playing. Please listen carefully...</p>
+        <!-- In real app, embed audio player or auto-play audio. -->
+        <div class="prep-timer">Audio playing... <span id="task2-audio-timer">--</span></div>
+    </div>
+
+    <!-- STEP 5: Task 2 Response -->
+    <div id="step5" class="speaking-step">
+        <h2>Speaking Task 2 Response</h2>
+        <p>
+            The man expresses his opinion on the increase in library staff. State his opinion and explain the reasons he
+            gives for holding that opinion.
+        </p>
+        <p><strong>Preparation:</strong> 30 seconds<br>
+           <strong>Response:</strong> 60 seconds</p>
+        <div class="prep-timer">Preparation Time Left: <span id="task2-prep-timer">30</span>s</div>
+        <div class="resp-timer" style="display:none;">Recording... Time Left: <span id="task2-resp-timer">60</span>s</div>
+    </div>
+
+    <!-- STEP 6: Task 3 Instructions -->
+    <div id="step6" class="speaking-step">
+        <h2>Speaking Task 3</h2>
+        <p><strong>Directions:</strong> You will read a short paragraph about an academic topic, then listen to a lecture
+            about it. You will have 50 seconds to read the paragraph. After, you will get a question about what you read
+            and heard. You will have 30 seconds to prepare your response and then 60 seconds to give it.</p>
+    </div>
+
+    <!-- STEP 7: Task 3 Reading -->
+    <div id="step7" class="speaking-step">
+        <h2>Speaking Task 3 Reading</h2>
+        <p><strong>You have 50 seconds to read</strong></p>
+        <p>
+            Evolution is the process in which, over time, animals develop the characteristics required to survive in
+            their natural environment. One form of this is convergent evolution, which is when animals living in
+            completely separate geographic areas end up with many identical features. This occurs when the habitats of
+            two creatures resemble each other in some way. Because they live in similar habitats, the animals end up
+            needing similar specialties in order to survive and reproduce.
+        </p>
+        <p>
+            In certain cases the animals are so alike that they may end up being mistaken for each other, while in other
+            cases they only share a few features.
+        </p>
+        <div class="prep-timer">Reading Timer: <span id="task3-reading-timer">50</span>s</div>
+    </div>
+
+    <!-- STEP 8: Task 3 Listening -->
+    <div id="step8" class="speaking-step">
+        <h2>Speaking Task 3 - Listening</h2>
+        <p>The lecture audio is playing. Please listen carefully...</p>
+        <div class="prep-timer">Audio playing... <span id="task3-audio-timer">--</span></div>
+    </div>
+
+    <!-- STEP 9: Task 3 Response -->
+    <div id="step9" class="speaking-step">
+        <h2>Speaking Task 3 Response</h2>
+        <p>Using the examples from the lecture, explain the concept of convergent evolution.</p>
+        <p><strong>Preparation:</strong> 30 seconds<br>
+           <strong>Response:</strong> 60 seconds</p>
+        <div class="prep-timer">Preparation Time Left: <span id="task3-prep-timer">30</span>s</div>
+        <div class="resp-timer" style="display:none;">Recording... Time Left: <span id="task3-resp-timer">60</span>s</div>
+    </div>
+
+    <!-- STEP 10: Task 4 Instructions -->
+    <div id="step10" class="speaking-step">
+        <h2>Speaking Task 4</h2>
+        <p><strong>Directions:</strong> You will listen to a lecture about an academic topic. After, you will get a
+            question about what you heard. You will have 20 seconds to prepare your response and then 60 seconds to
+            give it.</p>
+    </div>
+
+    <!-- STEP 11: Task 4 Listening -->
+    <div id="step11" class="speaking-step">
+        <h2>Speaking Task 4 - Listening</h2>
+        <p>The lecture audio is playing. Please listen carefully...</p>
+        <div class="prep-timer">Audio playing... <span id="task4-audio-timer">--</span></div>
+    </div>
+
+    <!-- STEP 12: Task 4 Response -->
+    <div id="step12" class="speaking-step">
+        <h2>Speaking Task 4 Response</h2>
+        <p>What did Realism try to depict? Include points and examples from the lecture.</p>
+        <p><strong>Preparation:</strong> 20 seconds<br>
+           <strong>Response:</strong> 60 seconds</p>
+        <div class="prep-timer">Preparation Time Left: <span id="task4-prep-timer">20</span>s</div>
+        <div class="resp-timer" style="display:none;">Recording... Time Left: <span id="task4-resp-timer">60</span>s</div>
+    </div>
+
+    <!-- STEP 13: Submission or End -->
+    <div id="step13" class="speaking-step">
+        <h2>End of Speaking Section</h2>
+        <p>Your answers have been recorded/submitted. This concludes the TOEFL Speaking tasks.</p>
+    </div>
+
+    <!-- Navigation Buttons at the Bottom -->
+    <div id="navigation-buttons">
+        <button id="back-button" onclick="goBack()" disabled>Back</button>
+        <button id="next-task-button" onclick="goNext()">Next</button>
+        <button id="submit-button" onclick="submitExam()" style="display:none;">Submit</button>
+    </div>
+</div>
+
+<!-- JavaScript -->
+<script>
+    // Track the current step (0..13)
+    let currentStep = 0;
+    const totalSteps = 14;  // We have step0 through step13
+
+    // Timers for each task
+    // We'll store them as objects to keep track of preparation and response durations, etc.
+    // Example:
+    // task1: prep=15s, resp=60s
+    // etc.
+    const speakingTimers = {
+        task1: { prep: 15, resp: 60 },
+        task2reading: 50,
+        task2: { prep: 30, resp: 60 },
+        task3reading: 50,
+        task3: { prep: 30, resp: 60 },
+        task4: { prep: 20, resp: 60 }
+    };
+
+    let intervalId = null;  // For setInterval
+    let timeLeft = 0;       // Tracks countdown for current mode
+    let timerMode = null;   // 'prep', 'resp', 'reading', 'listening', etc.
+
+    window.onload = function() {
+        showStep(currentStep);
+    };
+
+    // Show the appropriate step
+    function showStep(stepIndex) {
+        // Hide all steps first
+        for (let i = 0; i < totalSteps; i++) {
+            const stepDiv = document.getElementById('step' + i);
+            if (stepDiv) stepDiv.style.display = 'none';
+        }
+        // Display the current step
+        const activeStep = document.getElementById('step' + stepIndex);
+        if (activeStep) {
+            activeStep.style.display = 'block';
+        }
+
+        // Manage the "Back" button
+        document.getElementById('back-button').disabled = (stepIndex === 0);
+
+        // Show/hide submit if we are at the very end
+        if (stepIndex === (totalSteps - 1)) {
+            document.getElementById('next-task-button').style.display = 'none';
+            document.getElementById('submit-button').style.display = 'inline-block';
+        } else {
+            document.getElementById('next-task-button').style.display = 'inline-block';
+            document.getElementById('submit-button').style.display = 'none';
+        }
+
+        // Start or stop timers based on the step
+        clearInterval(intervalId);
+        intervalId = null;
+        timerMode = null;
+        timeLeft = 0;
+
+        // Decide what special actions to take on each step
+        switch(stepIndex) {
+            case 1: // Task 1 question
+                // Start 15s prep, then automatically do 60s response
+                startPrepTimer('task1');
+                break;
+            case 3: // Task 2 reading
+                startReadingTimer('task2reading');
+                break;
+            case 4: // Task 2 listening
+                // In real app, start audio playback
+                // Then auto skip or user can skip
+                // We'll just show a label
+                break;
+            case 5: // Task 2 response
+                startPrepTimer('task2');
+                break;
+            case 7: // Task 3 reading
+                startReadingTimer('task3reading');
+                break;
+            case 8: // Task 3 listening
+                // Start lecture audio playback
+                break;
+            case 9: // Task 3 response
+                startPrepTimer('task3');
+                break;
+            case 11: // Task 4 listening
+                // Start lecture audio playback
+                break;
+            case 12: // Task 4 response
+                startPrepTimer('task4');
+                break;
+            default:
+                // No auto-timers for instructions steps
+                break;
+        }
+    }
+
+    // Timer logic for PREPARATION + RESPONSE
+    function startPrepTimer(task) {
+        timerMode = 'prep';
+        if (!speakingTimers[task]) return;
+
+        const prepSeconds = speakingTimers[task].prep;
+        const respSeconds = speakingTimers[task].resp;
+
+        timeLeft = prepSeconds;
+        updateUI(); // Show the prep time
+
+        intervalId = setInterval(() => {
+            timeLeft--;
+            if (timeLeft < 0) {
+                // Switch to response
+                clearInterval(intervalId);
+                intervalId = null;
+                startRespTimer(task, respSeconds);
+            } else {
+                updateUI();
+            }
+        }, 1000);
+    }
+    function startRespTimer(task, respSeconds) {
+        timerMode = 'resp';
+        timeLeft = respSeconds;
+        updateUI(); // Switch to the response countdown
+        intervalId = setInterval(() => {
+            timeLeft--;
+            if (timeLeft < 0) {
+                clearInterval(intervalId);
+                intervalId = null;
+                // Auto skip to next step
+                goNext();
+            } else {
+                updateUI();
+            }
+        }, 1000);
+    }
+
+    // Timer logic for READING or LISTENING (single countdown)
+    function startReadingTimer(timerKey) {
+        timerMode = 'reading';
+        if (!speakingTimers[timerKey]) return;
+        timeLeft = speakingTimers[timerKey];
+
+        updateUI(); // Show reading timer
+        intervalId = setInterval(() => {
+            timeLeft--;
+            if (timeLeft < 0) {
+                clearInterval(intervalId);
+                intervalId = null;
+                goNext(); // auto skip
+            } else {
+                updateUI();
+            }
+        }, 1000);
+    }
+
+    // Update Timer Display
+    function updateUI() {
+        // Task 1 prep/res
+        if (currentStep === 1) {
+            const prepEl = document.getElementById('task1-prep-timer');
+            const respEl = document.getElementById('task1-resp-timer');
+            if (timerMode === 'prep') {
+                // Show prep timer, hide resp timer
+                document.querySelector('#step1 .prep-timer').style.display = 'block';
+                document.querySelector('#step1 .resp-timer').style.display = 'none';
+                if (prepEl) prepEl.textContent = timeLeft;
+            } else if (timerMode === 'resp') {
+                document.querySelector('#step1 .prep-timer').style.display = 'none';
+                document.querySelector('#step1 .resp-timer').style.display = 'block';
+                if (respEl) respEl.textContent = timeLeft;
+            }
+        }
+        // Task 2 reading
+        if (currentStep === 3 && timerMode === 'reading') {
+            const readEl = document.getElementById('task2-reading-timer');
+            if (readEl) readEl.textContent = timeLeft;
+        }
+        // Task 2 response
+        if (currentStep === 5) {
+            const prepEl = document.getElementById('task2-prep-timer');
+            const respEl = document.getElementById('task2-resp-timer');
+            if (timerMode === 'prep') {
+                document.querySelector('#step5 .prep-timer').style.display = 'block';
+                document.querySelector('#step5 .resp-timer').style.display = 'none';
+                if (prepEl) prepEl.textContent = timeLeft;
+            } else if (timerMode === 'resp') {
+                document.querySelector('#step5 .prep-timer').style.display = 'none';
+                document.querySelector('#step5 .resp-timer').style.display = 'block';
+                if (respEl) respEl.textContent = timeLeft;
+            }
+        }
+        // Task 3 reading
+        if (currentStep === 7 && timerMode === 'reading') {
+            const readEl = document.getElementById('task3-reading-timer');
+            if (readEl) readEl.textContent = timeLeft;
+        }
+        // Task 3 response
+        if (currentStep === 9) {
+            const prepEl = document.getElementById('task3-prep-timer');
+            const respEl = document.getElementById('task3-resp-timer');
+            if (timerMode === 'prep') {
+                document.querySelector('#step9 .prep-timer').style.display = 'block';
+                document.querySelector('#step9 .resp-timer').style.display = 'none';
+                if (prepEl) prepEl.textContent = timeLeft;
+            } else if (timerMode === 'resp') {
+                document.querySelector('#step9 .prep-timer').style.display = 'none';
+                document.querySelector('#step9 .resp-timer').style.display = 'block';
+                if (respEl) respEl.textContent = timeLeft;
+            }
+        }
+        // Task 4 response
+        if (currentStep === 12) {
+            const prepEl = document.getElementById('task4-prep-timer');
+            const respEl = document.getElementById('task4-resp-timer');
+            if (timerMode === 'prep') {
+                document.querySelector('#step12 .prep-timer').style.display = 'block';
+                document.querySelector('#step12 .resp-timer').style.display = 'none';
+                if (prepEl) prepEl.textContent = timeLeft;
+            } else if (timerMode === 'resp') {
+                document.querySelector('#step12 .prep-timer').style.display = 'none';
+                document.querySelector('#step12 .resp-timer').style.display = 'block';
+                if (respEl) respEl.textContent = timeLeft;
+            }
+        }
+    }
+
+    // Next & Back
+    function goNext() {
+        if (intervalId) {
+            clearInterval(intervalId);
+            intervalId = null;
+        }
+        currentStep++;
+        if (currentStep >= totalSteps) {
+            currentStep = totalSteps - 1; // stay on last
+        }
+        showStep(currentStep);
+    }
+    function goBack() {
+        if (intervalId) {
+            clearInterval(intervalId);
+            intervalId = null;
+        }
+        currentStep--;
+        if (currentStep < 0) currentStep = 0;
+        showStep(currentStep);
+    }
+
+    // Save & Exit
+    function saveAndExit() {
+        alert("Your speaking progress is saved. You can exit now.");
+        // Implement server-side save logic here
+    }
+
+    // Submit (final)
+    function submitExam() {
+        alert("Speaking section submitted!");
+        // Implement final submission logic (e.g., store recordings, etc.)
+    }
+</script>
+</body>
+</html>

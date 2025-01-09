@@ -34,7 +34,7 @@ class QuizGeneration:
     def __init__(self):
         self.schema = CompletedReadingQuiz
         self.client = openai.OpenAI(
-            api_key="sk-pkbkRk9F7ja252LbUoEyEyQF8PHmDP5oYuZ7N582GyT3BlbkFJxrkIAXfErC8L3gU9d5Juo6dDlEN1bfBpHK26SRtlwA")
+            api_key="")
 
     def generate_response(self):
         system_prompt = """\

@@ -1,0 +1,58 @@
+.idea/
+.bin/
+.ent/
+### Django ###
+*.log
+*.pot
+*.pyc
+__pycache__/
+local_settings.py
+db.sqlite3
+media
+
+### macOS ###
+*.DS_Store
+.AppleDouble
+.LSOverride
+
+# Python compiled files
+
+*.pyo
+*.pyd
+
+
+# Virtual environment
+/bin
+/lib
+/include
+/pyvenv.cfg
+
+# Django files
+*.py[co]
+media/
+staticfiles/
+
+# Environment variables
+.env
+
+# IDEs and editor settings
+.vscode/
+*.sublime-workspace
+*.sublime-project
+
+# macOS files
+.DS_Store
+
+# Git configuration
+.git/
+
+# Migrations (optional, if you don't want to include migrations in the repo)
+**/migrations/
+
+# Node.js (if using frontend builds)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Dependencies (for security)
+/share/

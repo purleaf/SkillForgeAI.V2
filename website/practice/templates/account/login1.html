@@ -1,4 +1,5 @@
 {% load socialaccount %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -243,16 +244,16 @@
         <div class="social-login">
             <a href="{% provider_login_url 'google' process='login' %}">
                 <div class="social-btn" onclick="handleSocialLogin('google')">
-                    <img src="images/google-icon.png" alt="Google">
+                    <img src="{% static 'practice/images/google.png' %}" alt="Google">
                     Start with Google
                 </div>
             </a>
             <div class="social-btn" onclick="handleSocialLogin('facebook')">
-                <img src="images/facebook-icon.png" alt="Facebook">
+                <img src="{% static 'practice/images/facebook.png' %}" alt="Facebook">
                 Start with Facebook
             </div>
             <div class="social-btn" onclick="handleSocialLogin('apple')">
-                <img src="images/apple-icon.png" alt="Apple">
+                <img src="{% static 'practice/images/apple.png' %}" alt="Apple">
                 Start with Apple
             </div>
         </div>

@@ -68,13 +68,22 @@ def quiz_api_view(request):
     return JsonResponse(quiz_dict, safe=False)
 
 
+def ielts_page(request):
+    return render(request, "IELTS.html")
+
+
 @login_required
 def toefl_reading(request):
     generator = QuizGeneration()
     quiz = generator.generate_response()
     json_f = json.loads(quiz.json())
-    context = { "passages": json_f["passages"] }
+    context = {"passages": json_f["passages"]}
     return render(request, "toefl_reading-v2.html", context)
+
+
+@login_required
+def ielts_writing(request):
+    return render(request, "ielts_writing.html")
 
 
 @login_required

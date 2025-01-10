@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -840,7 +841,7 @@
                 {% else %}
                 <!-- If user is not logged in, show login and sign up buttons -->
                 <li><a href="{% url 'login' %}" class="button">Login</a></li>
-                <li><a href="#" class="button modal-button" data-modal="signup-modal">Sign Up</a></li>
+<!--                <li><a href="#" class="button modal-button" data-modal="signup-modal">Sign Up</a></li>-->
                 {% endif %}
             </ul>
         </div>
@@ -857,21 +858,23 @@
             <a href="{% url 'toefl_page' %}">
                 <div class="icon">TOEFL</div>
             </a>
-            <div class="icon">IELTS</div>
+            <a href="{% url 'ielts_page' %}">
+                <div class="icon">IELTS</div>
+            </a>
             <div class="icon">TOEIC</div>
         </div>
-        <a href="#" class="button">Start Your Free Trial</a>
+        <a href="{% url 'login' %}" class="button">Start Your Free Trial</a>
         <div class="stats">
             <div class="stat">
-                <div class="number">1M+</div>
+                <div class="number">2</div>
                 <div class="label">Total Users</div>
             </div>
             <div class="stat">
-                <div class="number">120+</div>
+                <div class="number">3</div>
                 <div class="label">Countries</div>
             </div>
             <div class="stat">
-                <div class="number">10M+</div>
+                <div class="number">10+</div>
                 <div class="label">Tests Completed</div>
             </div>
         </div>
@@ -884,32 +887,31 @@
         <p>Experience the pinnacle of exam preparation with our advanced AI technology.</p>
         <div class="feature-list">
             <div class="feature-item glass-card">
-                <img src="images/personalized.png" alt="Personalized Learning">
                 <h3>Personalized Learning Paths</h3>
                 <p>Tailor your study plan based on your strengths and weaknesses.</p>
             </div>
             <div class="feature-item glass-card">
-                <img src="images/real-time.png" alt="Real-Time Analytics">
+
                 <h3>Real-Time Analytics</h3>
                 <p>Track your progress with comprehensive performance insights.</p>
             </div>
             <div class="feature-item glass-card">
-                <img src="images/adaptive.png" alt="Adaptive Testing">
+
                 <h3>Adaptive Testing</h3>
                 <p>Experience tests that adjust difficulty based on your answers.</p>
             </div>
             <div class="feature-item glass-card">
-                <img src="images/resources.png" alt="Extensive Resources">
+
                 <h3>Extensive Resources</h3>
                 <p>Access a vast library of study materials and practice questions.</p>
             </div>
             <div class="feature-item glass-card">
-                <img src="images/support.png" alt="24/7 Support">
+
                 <h3>24/7 Support</h3>
                 <p>Get assistance anytime with our dedicated support team.</p>
             </div>
             <div class="feature-item glass-card">
-                <img src="images/certificates.png" alt="Certification">
+
                 <h3>Certification</h3>
                 <p>Receive certificates upon completing various levels and modules.</p>
             </div>
@@ -923,24 +925,20 @@
         <h2>What Our Users Say</h2>
         <div class="testimonial-container">
             <div class="testimonial-item">
-                <p>"SkillForgeAI transformed the way I prepared for my TOEFL exam. The personalized study plans were
-                    exactly what I needed to improve efficiently."</p>
-                <p class="user">- Anna K., USA</p>
+                <p>"Very suitable for people looking to improve their English skills, almost all the features already functioning well."</p>
+                <p class="user">- Carlene, Indonesia</p>
             </div>
             <div class="testimonial-item">
-                <p>"The real-time analytics helped me identify my weak areas and focus my efforts accordingly. Highly
-                    recommend to anyone serious about their test scores."</p>
-                <p class="user">- Marco L., Italy</p>
+                <p>"The AI generated content and overall of the website is awesome. Waiting for a real person as a lecturer! "</p>
+                <p class="user">- Levinson, Indonesia</p>
             </div>
             <div class="testimonial-item">
-                <p>"With SkillForgeAI's adaptive testing, I felt challenged at the right level throughout my
-                    preparation. It made a significant difference in my IELTS results."</p>
-                <p class="user">- Li Wei, China</p>
+                <p>"The website is related to students English ability! very good"</p>
+                <p class="user">- Kelly Huang, Taiwan</p>
             </div>
             <div class="testimonial-item">
-                <p>"The extensive resources and 24/7 support were invaluable. I couldn't have achieved my desired TOEIC
-                    score without SkillForgeAI."</p>
-                <p class="user">- Sara M., Canada</p>
+                <p>"Best AI-based tool I ever seen!"</p>
+                <p class="user">- Timur Paperniuk, Russia</p>
             </div>
         </div>
         <!-- Carousel Navigation -->
@@ -1026,18 +1024,18 @@
 </footer>
 <!-- Modals -->
 <!-- Sign-Up Modal -->
-<div id="signup-modal" class="modal">
-    <div class="modal-content glass-card">
-        <span class="close" data-modal="signup-modal">&times;</span>
-        <h2>Sign Up</h2>
-        <form action="#" method="post">
-            <input type="text" name="name" placeholder="Your Name" required>
-            <input type="email" name="email" placeholder="Your Email" required>
-            <input type="password" name="password" placeholder="Create Password" required>
-            <button type="submit" class="button">Create Account</button>
-        </form>
-    </div>
-</div>
+<!--<div id="signup-modal" class="modal">-->
+<!--    <div class="modal-content glass-card">-->
+<!--        <span class="close" data-modal="signup-modal">&times;</span>-->
+<!--        <h2>Sign Up</h2>-->
+<!--        <form action="#" method="post">-->
+<!--            <input type="text" name="name" placeholder="Your Name" required>-->
+<!--            <input type="email" name="email" placeholder="Your Email" required>-->
+<!--            <input type="password" name="password" placeholder="Create Password" required>-->
+<!--            <button type="submit" class="button">Create Account</button>-->
+<!--        </form>-->
+<!--    </div>-->
+<!--</div>-->
 
 <!-- JavaScript -->
 <script>

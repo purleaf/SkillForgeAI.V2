@@ -34,7 +34,7 @@ class QuizGeneration:
     def __init__(self):
         self.schema = CompletedReadingQuiz
         self.client = openai.OpenAI(
-            api_key="")
+            api_key="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")
 
     def generate_response(self):
         system_prompt = """\
@@ -341,7 +341,7 @@ class QuizGeneration:
         Use double quotes only for dictionary keys and values.
 
         """
-        human_prompt = f""" Generate TOEFL Reading Part. 2 passages and 10 questions to each passage"""
+        human_prompt = f""" Generate TOEFL Reading Part. 1 passage and 10 questions to that passage."""
 
         response = self.client.beta.chat.completions.parse(
             model = "gpt-4o-2024-08-06",

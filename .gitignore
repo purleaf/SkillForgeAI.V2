@@ -33,7 +33,7 @@ media/
 staticfiles/
 
 # Environment variables
-.env
+*.env
 
 # IDEs and editor settings
 .vscode/

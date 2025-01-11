@@ -28,7 +28,7 @@ OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["7c19-203-121-254-251.ngrok-free.app", "localhost", "127.0.0.1"]
+ALLOWED_HOSTS = ["b4e1-203-121-254-251.ngrok-free.app", "localhost", "127.0.0.1"]
 
 # Application definition
 
@@ -54,7 +54,7 @@ INSTALLED_APPS = [
 ]
 CORS_ORIGIN_ALLOW_ALL = True
 
-CSRF_TRUSTED_ORIGINS = ["https://7c19-203-121-254-251.ngrok-free.app"]
+CSRF_TRUSTED_ORIGINS = ["https://b4e1-203-121-254-251.ngrok-free.app"]
 
 SITE_ID = 1
 
